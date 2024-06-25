@@ -103,6 +103,8 @@ Route::group(['prefix' => 'customer' , 'middleware' => 'auth'], function(){
   Route::get('/delete/{id}' , [CustomerController::class, 'destroy'])->name('customer.delete');
   Route::get('/export', [CustomerController::class , 'export'])->name('customer.export');
   Route::get('/datatable', [CustomerController::class, 'data'])->name('customer.data');
+  Route::get('/import', [CustomerController::class , 'fimport'])->name('customer.import');
+  Route::get('/importfile', [CustomerController::class , 'import'])->name('customer.fimport');
 });
 
 Route::group(['prefix' => 'order' , 'middleware' => 'auth'], function(){

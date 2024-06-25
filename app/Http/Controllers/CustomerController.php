@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CustomersExport;
+use App\Imports\CustomerImport;
 use App\Models\Customers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -123,5 +124,22 @@ class CustomerController extends Controller
     public function countdata(){
         $param = Customers::count();
         return view('layouts.sections.menu.menu',compact('param'));
+    }
+
+    public function fimport(){
+        return view('customers.import');
+    }
+
+    public function import(Request $request){
+        $request->validate([
+            'import' =>[
+                'required',
+                'file'
+            ],
+        ]);
+
+        Excel::import(new CustomerImport, $request->file('import'));
+
+        return redirect()->route('customer.index');
     }
 }

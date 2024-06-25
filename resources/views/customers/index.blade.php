@@ -28,6 +28,8 @@
     </div>
     <div class="container mx-auto px-4 lg:w-4/5 xl:w-3/4">
         <a href="{{ route('customer.create') }}" class="btn btn-primary btn-sm object-right">Add</a>
+        <a href="{{ route('customer.import') }}" class="btn btn-primary btn-sm object-right">Import</a>
+        <a href="{{ route('customer.export') }}" class="btn btn-primary btn-sm object-right">Import</a>
         <div class="card mt-5">
             <div class="card-header">
                 <h5 class="card-title">Orders</h5>

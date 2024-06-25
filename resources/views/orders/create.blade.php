@@ -40,7 +40,7 @@
                                         <div class="form-floating form-floating-outline">
                                             <select class="form-control" aria-label="Select order status"
                                                 name="productid[]" data-placeholder="Select Item">
-                                                {{-- <option value="" selected disabled>Select Item</option> --}}
+                                                <option value="" selected disabled>Select Item</option>
                                                 @foreach ($products as $item)
                                                     <option value="{{ $item->id }}">{{ $item->pname }}</option>
                                                 @endforeach

@@ -17,7 +17,7 @@ class CustomersExport implements FromCollection, WithHeadings
     {
         return Customers::all()->map(function ($customer) {
             return [
-                'ID' => $customer->ID,
+            'ID' => $customer->ID,
             'First Name' => $customer->fname,
             'Last Name' =>$customer->lname ,
             'Email'=> $customer->email,

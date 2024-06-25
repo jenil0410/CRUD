@@ -131,15 +131,7 @@ class CustomerController extends Controller
     }
 
     public function import(Request $request){
-        $request->validate([
-            'import' =>[
-                'required',
-                'file'
-            ],
-        ]);
-
-        Excel::import(new CustomerImport, $request->file('import'));
-
+        Excel::import(new CustomerImport, $request->file('import')->store('import'));
         return redirect()->route('customer.index');
     }
 }

@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Carbon\Carbon;
 
-class CustomersExport implements FromCollection, WithHeadings
+class CustomersExport implements FromCollection
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -36,22 +36,22 @@ class CustomersExport implements FromCollection, WithHeadings
         // return Customers::all();
     }
     
-    public function headings(): array
-    {
-        return [
-            'ID',
-            'First Name',
-            'Last Name',
-            'Email',
-            'Phone',
-            'Address',
-            'City',
-            'State',
-            'Pin Code',
-            'Customer Type',
-            'Created_at',
-            'Updated_at',
+    // public function headings(): array
+    // {
+    //     return [
+    //         'ID',
+    //         'First Name',
+    //         'Last Name',
+    //         'Email',
+    //         'Phone',
+    //         'Address',
+    //         'City',
+    //         'State',
+    //         'Pin Code',
+    //         'Customer Type',
+    //         'Created_at',
+    //         'Updated_at',
             
-        ];
-    }
+    //     ];
+    // }
 }

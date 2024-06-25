@@ -1,0 +1,63 @@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+    <!-- ! Hide app brand if navbar-full -->
+    <div class="app-brand demo">
+        <a href="{{ url('/') }}" class="app-brand-link">
+            <span class="app-brand-logo demo me-1">
+                @include('_partials.macros', ['height' => 20])
+            </span>
+            <span class="app-brand-text demo menu-text fw-semibold ms-2">{{ config('variables.templateName') }}</span>
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="mdi menu-toggle-icon d-xl-block align-middle mdi-20px"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <li
+            class="menu-item {{ in_array(Route::current()->getName(), ['product.index', 'product.create', 'product.edit']) ? 'active' : '' }}">
+            <a href="{{ route('product.index') }} " class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>Product </div>
+            </a>
+        </li>
+
+        <li
+            class="menu-item {{ in_array(Route::current()->getName(), ['order.index', 'order.create', 'order.edit']) ? 'active' : '' }}">
+            <a href="{{ route('order.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>Order</div>
+            </a>
+        </li>
+
+        <li
+            class="menu-item {{ in_array(Route::current()->getName(), ['customer.index', 'customer.create', 'customer.edit']) ? 'active' : '' }}">
+            <a href="{{ route('customer.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>customer</div>
+            </a>
+        </li>
+
+        <li class="menu-item {{ in_array(Route::current()->getName(), ['menu']) ? 'active' : '' }}">
+            <a href="{{ route('menu') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>Dashboard</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+
+                <x-dropdown-link :href="route('logout')"
+                    onclick="event.preventDefault();
+                              this.closest('form').submit();">
+                    <i class='mdi mdi-power me-1 mdi-20px'></i>
+                    {{ __('Log Out') }}
+                </x-dropdown-link>
+            </form>
+        </li>
+    </ul>
+</aside>

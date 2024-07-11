@@ -92,6 +92,7 @@
     </aside>
 
     @include('orders\dash')
+    @include('users\dashboard')
 
 
 </body>

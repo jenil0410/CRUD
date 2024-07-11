@@ -6,9 +6,16 @@ use App\Exports\CustomersExport;
 use App\Imports\CustomerImport;
 use App\Models\Customers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Validators\ValidationException; // Exception for validation errors during import
+use Illuminate\Support\Facades\Validator; // Facade for Laravel Validator class
+use Throwable; // For catching generic exceptions
+use Maatwebsite\Excel\Validators\Failure; // For handling import failures
+use Maatwebsite\Excel\Concerns\SkipsOnError; // Interface for skipping on error during import
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Facades\Excel;
+use Sabberworm\CSS\Property\Import;
 use Yajra\DataTables\DataTables;
+use Log;
 
 class CustomerController extends Controller
 {
@@ -118,7 +125,7 @@ class CustomerController extends Controller
     public function data() 
     {
         $customers = Customers::query()->get();
-      return DataTables::of($customers)->make(true);
+        return DataTables::of($customers)->make(true);
     }
 
     public function countdata(){
@@ -130,8 +137,23 @@ class CustomerController extends Controller
         return view('customers.import');
     }
 
-    public function import(Request $request){
-        Excel::import(new CustomerImport, $request->file('import')->store('import'));
-        return redirect()->route('customer.index');
+    public function Import(Request $request){
+        
+        $file = $request->file('file');
+        $validation = validator($request->all(), [
+            'file' => 'required|mimes:xlsx,xls',
+            
+        ]);
+
+        
+        
+        if ($validation->fails()) {
+            return redirect()->back()->withErrors($validation)->withInput();
+        }
+
+         Excel::import(new CustomerImport, $request->file('file'));
+         return redirect()->route('customer.index');
+            
+        }
     }
-}
+    // return Excel::import(new CustomerImport, dd(request()->file('file')));

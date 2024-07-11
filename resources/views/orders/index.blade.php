@@ -27,6 +27,8 @@
     </div>
     <div class="container mx-auto px-4 lg:w-4/5 xl:w-3/4">
         <a href="{{ route('order.create') }}" class="btn btn-primary btn-sm object-right">Add</a>
+        <a href="{{ route('order.view') }}" class="btn btn-primary btn-sm object-right">Import</a>
+        <a href="{{ route('order.export') }}" class="btn btn-primary btn-sm object-right">Export</a>
         <div class="card mt-5">
             <div class="card-header">
                 <h5 class="card-title">Orders</h5>

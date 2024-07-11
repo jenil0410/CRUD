@@ -3,30 +3,62 @@
 namespace App\Imports;
 
 use App\Models\Customers;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Throwable;
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Validators\Failure;
 
-class CustomerImport implements ToCollection, WithHeadingRow
+
+class CustomerImport implements ToModel, WithHeadingRow, WithValidation
 {
     /**
     * @param Collection $collection
     */
-    public function collection(Collection $rows)
+    
+
+     protected $errors = [];
+     public function model(array $row)
     {
-        foreach ($rows as $row) 
-        {
-            Customers::create([
-                'fname'=> $row[0],
-                'lname' => $row[1],
-                'phone' => $row[2],
-                'email' => $row[3],
-                'pcode' => $row[4],
-                'address' => $row[5],
-                'city' => $row[6],
-                'state' => $row[7],
-                'ctype' => $row[8]
+            return new Customers([
+                'fname'   => $row['fname'],
+                'lname'   => $row['lname'],
+                'phone'   => $row['phone'],
+                'email'   => $row['email'],
+                'pcode'   => $row['pcode'],
+                'address' => $row['address'],
+                'city'    => $row['city'],
+                'state'   => $row['state'],
+                'ctype'   => $row['ctype'],
             ]);
-        }
+            
+        
     }
+
+    
+    public function rules(): array{
+        return[
+            '*.fname' => ['required','string'],
+            '*.lname' => ['required','string'],
+            '*.phone' => ['required','numeric','Digits:10'],
+            '*.email' => ['required','email','unique:customers,email'],
+            '*.pcode' => ['required'],
+            '*.address' => ['required'],
+            '*.city' => ['required'],
+            '*.state' => ['required'],
+            '*.ctype' => ['required']
+        ];
+    }
+
+    
+    
+    
+  
+
 }

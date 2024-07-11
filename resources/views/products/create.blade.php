@@ -18,7 +18,7 @@
                 <form action="{{ route('product.insert') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="basic-default-name">Product Name</label>
+                        <label class="col-sm-2 col-form-label motion-reduce:" for="basic-default-name">Product Name</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="basic-default-name" placeholder="Product"
                                 name="pname" />

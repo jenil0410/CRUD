@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\OrdersExport;
+use App\Imports\OrderImport;
 use App\Models\Customers;
 use App\Models\Orders;
 use App\Models\Products;
@@ -55,7 +56,7 @@ class OrderController extends Controller
         $validation = [];
 
         
-        foreach ($data['productid'] as $index => $productId) {
+        foreach ($data['oname'] as $index => $oname) {
             
             $validation["oname.$index"] = 'required|max:30';
             $validation["ostatus.$index"] = 'required';
@@ -77,10 +78,10 @@ class OrderController extends Controller
             return redirect()->back()->withErrors($validationMessages)->withInput();
         }
         
-        foreach ($data['productid'] as $index => $productId) {
+        foreach ($data['oname'] as $index => $oname) { 
             $order = new Orders();
-            $order->oname = $data['oname'][$index];
-            $order->productid = $productId;
+            $order->oname = $oname;
+            $order->productid = $data['productid'][$index];
             $order->customerid = $data['customerid'][$index];
             $order->ostatus = $data['ostatus'][$index];
             $order->saddress = $data['saddress'][$index];
@@ -123,7 +124,7 @@ class OrderController extends Controller
         });
         
         return $pdf->download('invoice'.$order->id.'.pdf');
-
+        
        
     }
 
@@ -201,5 +202,21 @@ class OrderController extends Controller
         $products = Products::all();
         $customer = Customers::all();
         return view('orders.formrepeat',compact('products','customer','order'));
+    }
+
+    public function importView(){
+        return view('orders.import');
+    }
+
+    public function import(request $request){
+        $products = Products::all();
+        $customer = Customers::all();
+        $validation = validator($request->all(), [
+            'file' => 'required|mimes:xlsx,xls',
+            
+        ]);
+
+        Excel::import(new OrderImport,$request->file('file'));
+        return redirect()->route('order.index');
     }
 }

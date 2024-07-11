@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Carbon\Carbon;
 
-class CustomersExport implements FromCollection
+class CustomersExport implements FromCollection, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -17,16 +17,16 @@ class CustomersExport implements FromCollection
     {
         return Customers::all()->map(function ($customer) {
             return [
-            'ID' => $customer->ID,
-            'First Name' => $customer->fname,
-            'Last Name' =>$customer->lname ,
-            'Email'=> $customer->email,
-            'Phone' => $customer->phone,
-            'Address' =>$customer->address,
-            'City' => $customer->city,
-            'State' => $customer->state,
-            'Pin Code' => $customer->pcode,
-            'Customer Type' =>$customer->ctype,
+            'id' => $customer->id,
+            'fname' => $customer->fname,
+            'lname' =>$customer->lname ,
+            'email'=> $customer->email,
+            'phone' => $customer->phone,
+            'address' =>$customer->address,
+            'city' => $customer->city,
+            'state' => $customer->state,
+            'pcode' => $customer->pcode,
+            'ctype' =>$customer->ctype,
             'Created_at'=> Carbon::parse($customer->created_at)->format('d/m/Y'),
             'Updated_at'=> Carbon::parse($customer->updated_at)->format('d/m/Y'),
 
@@ -36,22 +36,22 @@ class CustomersExport implements FromCollection
         // return Customers::all();
     }
     
-    // public function headings(): array
-    // {
-    //     return [
-    //         'ID',
-    //         'First Name',
-    //         'Last Name',
-    //         'Email',
-    //         'Phone',
-    //         'Address',
-    //         'City',
-    //         'State',
-    //         'Pin Code',
-    //         'Customer Type',
-    //         'Created_at',
-    //         'Updated_at',
+    public function headings(): array
+    {
+        return [
+            'id',
+            'fname',
+            'lname',
+            'email',
+            'phone',
+            'address',
+            'city',
+            'state',
+            'pcode',
+            'ctype',
+            'Created_at',
+            'Updated_at',
             
-    //     ];
-    // }
+        ];
+    }
 }

@@ -3,16 +3,29 @@
 @section('title', 'Order Form')
 
 @section('style')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
     <style>
         .text-red {
             color: red;
         }
+
+        .select2-container--default .select2-selection--single{
+            height: 53px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 50px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow{
+            height: 50px !important;
+        }
     </style>
 @endsection
 
 @section('content')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <div class="container">
         <div class="col-xxl">
             <div class="card mb-4">
@@ -29,18 +42,18 @@
                                     <div class="col-lg-6 col-xl-3 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
                                             <input type="text" class="form-control" placeholder="Enter order name"
-                                                aria-label="Enter order name" name="oname[]">
-                                            @error('oname.*')
+                                                aria-label="Enter order name" name="oname[]" required>
+                                            {{-- @error('oname.*')
                                                 <small class="text-danger">{{ $message }}</small>
-                                            @enderror
+                                            @enderror --}}
                                             <label>Order Item</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
-                                            <select class="form-control" aria-label="Select order status"
+                                            <select class="form-control select2" aria-label="Select order status"
                                                 name="productid[]" data-placeholder="Select Item">
-                                                {{-- <option value="" selected disabled>Select Item</option> --}}
+                                                <option value="" selected disabled>Select Item</option>
                                                 @foreach ($products as $item)
                                                     <option value="{{ $item->id }}">{{ $item->pname }}</option>
                                                 @endforeach
@@ -50,8 +63,9 @@
                                     </div>
                                     <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
-                                            <select class="form-control" aria-label="Select order status"
+                                            <select class="form-control select2" aria-label="Select order status"
                                                 name="customerid[]">
+                                                <option value="" selected disabled>Select Customer</option>
                                                 @foreach ($customer as $custom)
                                                     <option value="{{ $custom->id }}">{{ $custom->fname }}</option>
                                                 @endforeach
@@ -61,10 +75,11 @@
                                     </div>
                                     <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
-                                            <select class="form-control" aria-label="Select order status"
+                                            <select class="form-control select2" aria-label="Select order status"
                                                 name="customerid[]">
+                                                <option value="" selected disabled>Select Email</option>
                                                 @foreach ($customer as $custom)
-                                                    <option value="{{ $custom->id }}">{{ $custom->email }}</option>
+                                                    <option value="{{ $custom->email }}">{{ $custom->email }}</option>
                                                 @endforeach
                                             </select>
                                             <label>Customer Email</label>
@@ -72,56 +87,57 @@
                                     </div>
                                     <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
-                                            <select class="form-control" aria-label="Select order status" name="ostatus[]">
+                                            <select class="form-control select2" aria-label="Select order status" name="ostatus[]" >
+                                                <option value="" selected disabled>Order Status</option>
                                                 <option value="pending">Pending</option>
                                                 <option value="processing">Processing</option>
                                                 <option value="shipped">Shipped</option>
                                                 <option value="delivered">Delivered</option>
                                                 <option value="canceled">Canceled</option>
                                             </select>
-                                            @error('ostatus.*')
+                                            {{-- @error('ostatus.*')
                                                 <small class="text-danger">{{ $message }}</small>
-                                            @enderror
+                                            @enderror --}}
                                             <label>Order Status</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-xl-3 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
                                             <input type="text" class="form-control" placeholder="Enter shipping address"
-                                                aria-label="Enter shipping address" name="saddress[]">
-                                            @error('saddress.*')
+                                                aria-label="Enter shipping address" name="saddress[]" required>
+                                            {{-- @error('saddress.*')
                                                 <small class="text-danger">{{ $message }}</small>
-                                            @enderror
+                                            @enderror --}}
                                             <label>Shipping Address</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-xl-3 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
                                             <input type="text" class="form-control" placeholder="Enter billing address"
-                                                aria-label="Enter billing address" name="baddress[]">
-                                            @error('baddress.*')
+                                                aria-label="Enter billing address" name="baddress[]" required>
+                                            {{-- @error('baddress.*')
                                                 <small class="text-danger">{{ $message }}</small>
-                                            @enderror
+                                            @enderror --}}
                                             <label>Billing Address</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-xl-3 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
                                             <input type="number" class="form-control" placeholder="Enter total amount"
-                                                aria-label="Enter total amount" name="tamount[]" id="tamount">
-                                            @error('tamount.*')
+                                                aria-label="Enter total amount" name="tamount[]" id="tamount" required>
+                                            {{-- @error('tamount.*')
                                                 <small class="text-danger">{{ $message }}</small>
-                                            @enderror
+                                            @enderror --}}
                                             <label>Total Amount</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-xl-3 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
                                             <input type="number" class="form-control" placeholder="Enter total discount"
-                                                aria-label="Enter total discount" name="discount[]" id="discount">
-                                            @error('discount.*')
+                                                aria-label="Enter total discount" name="discount[]" id="discount" required>
+                                            {{-- @error('discount.*')
                                                 <small class="text-danger">{{ $message }}</small>
-                                            @enderror
+                                            @enderror --}}
                                             <label>Total Discount (%)</label>
                                         </div>
                                     </div>
@@ -129,10 +145,10 @@
                                         <div class="form-floating form-floating-outline">
                                             <input type="number" class="form-control" placeholder="Discount Amount"
                                                 aria-label="Discount Amount" name="damount[]" id="damount" readonly
-                                                onclick="calculatediscount()">
-                                            @error('damount.*')
+                                                onclick="calculatediscount()" >
+                                            {{-- @error('damount.*')
                                                 <small class="text-danger">{{ $message }}</small>
-                                            @enderror
+                                            @enderror --}}
                                             <label>Discount Amount</label>
                                         </div>
                                     </div>
@@ -161,7 +177,7 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js"></script>
    
     <script>
         $(document).ready(function() {
@@ -180,49 +196,56 @@
                                     </div>
                                     <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
-                                            <select class="form-control" aria-label="Select order status" name="productid[]">
+                                            <select class="form-control select2" aria-label="Select order status"
+                                                name="productid[]" data-placeholder="Select Item">
+                                                <option value="" selected disabled>Select Item</option>
                                                 @foreach ($products as $item)
                                                     <option value="{{ $item->id }}">{{ $item->pname }}</option>
-                                                    @endforeach
+                                                @endforeach
                                             </select>
                                             <label>Select Item</label>
-                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
-                                            <select class="form-control" aria-label="Select order status" name="customerid[]" required>
+                                            <select class="form-control select2" aria-label="Select order status"
+                                                name="customerid[]">
+                                                <option value="" selected disabled>Select Customer</option>
                                                 @foreach ($customer as $custom)
-                                                <option value="{{ $custom->id }}">{{ $custom->fname }}</option>
+                                                    <option value="{{ $custom->id }}">{{ $custom->fname }}</option>
                                                 @endforeach
                                             </select>
                                             <label>Select Customer</label>
                                         </div>
-                                        </div>
-                                    <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
+                                    </div>
+                                   <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
-                                            <select class="form-control" aria-label="Select order status" name="customerid[]" required>
+                                            <select class="form-control select2" aria-label="Select order status"
+                                                name="customerid[]">
+                                                <option value="" selected disabled>Select Email</option>
                                                 @foreach ($customer as $custom)
                                                     <option value="{{ $custom->id }}">{{ $custom->email }}</option>
-                                                    @endforeach
+                                                @endforeach
                                             </select>
                                             <label>Customer Email</label>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
+                                   <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
-                                            <select class="form-control ostatus" aria-label="Select order status" name="ostatus[]" required>
+                                            <select class="form-control select2" aria-label="Select order status" name="ostatus[]" >
+                                                <option value="" selected disabled>Order Status</option>
                                                 <option value="pending">Pending</option>
                                                 <option value="processing">Processing</option>
                                                 <option value="shipped">Shipped</option>
                                                 <option value="delivered">Delivered</option>
                                                 <option value="canceled">Canceled</option>
-                                                </select>
-                                                @foreach ($errors->get('ostatus[]') as $error)
-                                                <small class="text-red">*{{ $error }}</small>
-                                            @endforeach
-                                                <label>Order Status</label>
-                                                </div>
-                                                </div>
+                                            </select>
+                                            {{-- @error('ostatus.*')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror --}}
+                                            <label>Order Status</label>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-6 col-xl-3 col-12 mb-0" style="width: 20%">
                                         <div class="form-floating form-floating-outline">
                                             <input type="text" class="form-control saddress" placeholder="Enter shipping address"
@@ -282,55 +305,11 @@
                                             </div>
                                 </div>
                                 <hr class="opacity-100">`);
-                                // addValidation();
-
             });
 
-            // function addValidation() {
-            //     $(".oname").each((i, e) => {
-            //         $(e).rules("add", {
-            //             required: true
-            //         })
-            //     });
+        
 
-            //     $(".ostatus").each((i, e) => {
-            //         $(e).rules("add", {
-            //             required: true
-            //         })
-            //     });
-
-            //     $(".saddress").each((i, e) => {
-            //         $(e).rules("add", {
-            //             required: true
-            //         })
-            //     });
-
-            //     $(".baddress").each((i, e) => {
-            //         $(e).rules("add", {
-            //             required: true
-            //         })
-            //     });
-
-            //     $(".tamount").each((i, e) => {
-            //         $(e).rules("add", {
-            //             required: true
-            //         })
-            //     });
-
-            //     $(".discount").each((i, e) => {
-            //         $(e).rules("add", {
-            //             required: true
-            //         })
-            //     });
-
-            //     $(".damount").each((i, e) => {
-            //         $(e).rules("add", {
-            //             required: true
-            //         })
-            //     });
-            // };
-
-            // addValidation();
+          
 
         $(document).on('click', '.del', function(e) {
             if (!confirm('do you want to remove the form?')) {
@@ -360,6 +339,9 @@
         
 
         });
+        $(document).ready(function () {
+            $(".select2").select2();
+        });
 
         function calculatediscount() {
 
@@ -373,7 +355,7 @@
             document.getElementById('damount').value = damount;
         }
         calculatediscount();
-
+       
 
     </script>
 

@@ -41,7 +41,7 @@
 
 <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
     <!-- Search -->
-    <div class="navbar-nav align-items-center">
+    <div class="navbar-nav align-items-center invisible">
         <div class="nav-item d-flex align-items-center">
             <i class="mdi mdi-magnify mdi-24px lh-0"></i>
             <input type="text" class="form-control border-0 shadow-none bg-body" placeholder="Search..."
@@ -52,7 +52,7 @@
     <ul class="navbar-nav flex-row align-items-center ms-auto">
 
         <!-- Place this tag where you want the button to render. -->
-        <li class="nav-item lh-1 me-3">
+        <li class="nav-item lh-1 me-3 invisible">
             <a class="github-button"
                 href="https://github.com/themeselection/materio-bootstrap-html-laravel-admin-template-free"
                 data-icon="octicon-star" data-size="large" data-show-count="true"
@@ -79,7 +79,7 @@
                             <div class="flex-grow-1">
                                 
                                 <h6 class="mb-0">{{ auth()->user()->name }}</h6>
-                                <small class="text-muted">Admin</small>
+                                <small class="text-muted font-extrabold">{{ auth()->user()->getRoleNames()->first() }}</small>
                             </div>
                         </div>
                     </a>

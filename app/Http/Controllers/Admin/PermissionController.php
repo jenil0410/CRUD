@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class PermissionController extends Controller
@@ -16,7 +17,9 @@ class PermissionController extends Controller
     public function index()
     {
         $permission = Permission::all();
-        return view('permissions.index',compact('permission'));
+        $roles = Role::all();
+        // dd($permission);
+        return view('permissions.index',compact('permission','roles'));
     }
 
     /**

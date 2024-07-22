@@ -1,3 +1,4 @@
+
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 
     <!-- ! Hide app brand if navbar-full -->
@@ -17,36 +18,77 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <li
-            class="menu-item {{ in_array(Route::current()->getName(), ['product.index', 'product.create', 'product.edit']) ? 'active' : '' }}">
-            <a href="{{ route('product.index') }} " class="menu-link">
-                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
-                <div>Product </div>
-            </a>
-        </li>
-
-        <li
-            class="menu-item {{ in_array(Route::current()->getName(), ['order.index', 'order.create', 'order.edit']) ? 'active' : '' }}">
-            <a href="{{ route('order.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
-                <div>Order</div>
-            </a>
-        </li>
-
-        <li
-            class="menu-item {{ in_array(Route::current()->getName(), ['customer.index', 'customer.create', 'customer.edit']) ? 'active' : '' }}">
-            <a href="{{ route('customer.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
-                <div>customer</div>
-            </a>
-        </li>
-
         <li class="menu-item {{ in_array(Route::current()->getName(), ['menu']) ? 'active' : '' }}">
             <a href="{{ route('menu') }}" class="menu-link">
                 <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
                 <div>Dashboard</div>
             </a>
         </li>
+        @if ( Auth::user()->getRoleNames()->contains('admin'))
+        <li
+            class="menu-item {{ in_array(Route::current()->getName(), ['product.index', 'product.create', 'product.edit']) ? 'active' : '' }}">
+            <a href="{{ route('product.index') }} " class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>Products </div>
+            </a>
+        </li>
+        @endif
+
+        @if ( Auth::user()->getRoleNames()->contains('admin'))
+            <li
+                class="menu-item {{ in_array(Route::current()->getName(), ['order.index', 'order.create', 'order.edit']) ? 'active' : '' }}">
+                <a href="{{ route('order.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                    <div>Orders</div>
+                </a>
+            </li>
+        @endif
+
+        <li
+            class="menu-item {{ in_array(Route::current()->getName(), ['customer.index', 'customer.create', 'customer.edit']) ? 'active' : '' }}">
+            <a href="{{ route('customer.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>customers</div>
+            </a>
+        </li>
+        @if ( Auth::user()->getRoleNames()->contains('admin'))
+        <li
+            class="menu-item {{ in_array(Route::current()->getName(), ['permission.index', 'permission.create', 'permission.edit']) ? 'active' : '' }}">
+            <a href="{{ route('permission.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>permissions</div>
+            </a>
+        </li>
+        @endif
+
+        @if ( Auth::user()->getRoleNames()->contains('admin'))
+        <li
+            class="menu-item {{ in_array(Route::current()->getName(), ['role.index', 'role.create', 'role.edit']) ? 'active' : '' }}">
+            <a href="{{ route('role.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>Roles</div>
+            </a>
+        </li>
+        @endif
+
+        @if ( Auth::user()->getRoleNames()->contains('admin'))
+        <li class="menu-item {{ in_array(Route::current()->getName(), ['assign.index']) ? 'active' : '' }}">
+            <a href="{{ route('assign.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>Assign Permission</div>
+            </a>
+        </li>
+        @endif
+
+        @if ( Auth::user()->getRoleNames()->contains('admin'))
+        <li class="menu-item {{ in_array(Route::current()->getName(), ['urole.index']) ? 'active' : '' }}">
+            <a href="{{ route('urole.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+                <div>Assign Role</div>
+            </a>
+        </li>
+        @endif
+
         <li class="menu-item">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf

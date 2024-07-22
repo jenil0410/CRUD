@@ -20,10 +20,10 @@
                     <div class="row mb-3">
                         <div class="col-lg-6 col-xl-2 col-12 mb-0" style="width: 20%">
                             <div class="form-floating form-floating-outline">
-                                <select class="form-control select2" aria-label="Select order status" name="role"
+                                <select class="form-control select2" aria-label="Select order status" name="userr"
                                     data-placeholder="Select Item">
                                     <option value="" selected disabled>Select User</option>
-                                    @foreach ($users as $item)
+                                    @foreach ($user as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -14,9 +15,11 @@ class IndexController extends Controller
      */
     public function index()
     {
+        $users = User::all();
         $roles = Role::all();
         $permissions = Permission::all();
-        return view('roles.assignform',compact('roles','permissions'));
+        
+        return view('roles.assignform',compact('roles','permissions','users'));
     }
 
     /**
@@ -35,7 +38,7 @@ class IndexController extends Controller
         $roles = Role::findById($request->role);
     
         $permission = $request->permission_id;
-        
+        // dd($roles);
         $roles->permissions()->sync($permission);
         return redirect()->route('assign.index');
     }
@@ -53,7 +56,7 @@ class IndexController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        
     }
 
     /**
@@ -70,5 +73,11 @@ class IndexController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function userrole(Request $request)
+    {
+        $roles = Role::findById($request->role);
+        
     }
 }

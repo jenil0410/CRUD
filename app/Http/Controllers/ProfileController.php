@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use PHPUnit\Framework\TestStatus\Success;
+use Spatie\Permission\Models\Role;
 
 class ProfileController extends Controller
 {
@@ -57,5 +59,14 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function checkuser(){
+        $role = Role::all();
+        dd($role->id);
+        dd(Auth::user()->id == 1);
+        if(Auth::user()->role_id == 1){
+           
+        }
     }
 }

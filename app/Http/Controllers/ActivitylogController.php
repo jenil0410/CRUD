@@ -1,31 +1,33 @@
 <?php
 
 namespace App\Http\Controllers;
+
+
 use App\Models\Customers;
 use App\Models\Orders;
 use App\Models\Products;
-
 use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
 
-class DashboardController extends Controller
+class ActivitylogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $count = Orders::count();
-        $param = Customers::count();
-        $prod = Products::count();
-        return view('layouts.sections.menu.menu', compact('count','param','prod'));
-    }
-
-    public function view()
-    {
-        $count = Orders::count();
-        $param = Customers::count();
-        $prod = Products::count();
-        return view('dashboard');
+        // $customer = Activity::Where('subject_type',Customers::class)->get();
+        // $product = Activity::Where('subject_type',Products::class)->get();
+        // $order = Activity::Where('subject_type',Orders::class)->get();
+        // dd($order);
+        // $alllogs = collect()
+        //         ->merge($customer)
+        //         ->merge($product)
+        //         ->merge($order);
+        // $alllogs = $alllogs->sortByDesc('Created_at');
+        $log = Activity ::all()->last();
+        dd($log);
+        return view('activitylog.activitylog',compact('log'));
     }
 
     /**
@@ -33,23 +35,7 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        return view('dashboard');
-    }
-
-    public function chart(){
-        $count = Orders::count();
-        $param = Customers::count();
-        $prod = Products::count();
-
-        $data = [
-            'categories' => ['Overall  Graphical'],
-            'series' => [
-                ['name' => 'Orders', 'data' => [$count]],
-                ['name' => 'Products', 'data' => [$prod]],
-                ['name' => 'Customers', 'data' => [$param]],
-            ]
-        ];
-        return response()->json($data);
+        //
     }
 
     /**
@@ -65,7 +51,7 @@ class DashboardController extends Controller
      */
     public function show(string $id)
     {
-        
+        //
     }
 
     /**

@@ -47,7 +47,7 @@ class CustomerImport implements ToModel, WithHeadingRow, WithValidation
             '*.fname' => ['required','string'],
             '*.lname' => ['required','string'],
             '*.phone' => ['required','numeric','Digits:10'],
-            '*.email' => ['required','email','unique:customers,email'],
+            '*.email' => ['required','email'],
             '*.pcode' => ['required'],
             '*.address' => ['required'],
             '*.city' => ['required'],

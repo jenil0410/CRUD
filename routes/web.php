@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivitylogController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\IndexController;
@@ -54,6 +55,7 @@ use App\Http\Controllers\form_elements\InputGroups;
 use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic as TablesBasic;
+use Spatie\Activitylog\Models\Activity;
 
 
 /*
@@ -71,6 +73,10 @@ Route::get('/', function () {
     return view('auth.register');
 });
 
+Route::get('/log',function(){
+  return Activity::all();
+});
+
 Route::get('/userd', function () {
   return view('layouts.sections.menu.userdash');
 });
@@ -79,11 +85,14 @@ Route::get('/permission', function () {
   return view('permissions.index');
 });
 
+Route::group(['prefix' => 'log','middleware' => 'auth'], function() {
+  route::get('/',[ActivitylogController::class, 'index'])->name('menu');
+  });
 
-Route::group(['prefix' => 'menu','middleware' => 'auth','role:admin'], function() {
+Route::group(['prefix' => 'menu','middleware' => 'auth'], function() {
 route::get('/',[DashboardController::class, 'index'])->name('menu');
 });
-
+route::get('/chart',[DashboardController::class,'chart'])->name('chart');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -95,28 +104,40 @@ require __DIR__.'/auth.php';
 
 
 // product form
-Route::group(['prefix' => 'product','middleware' => 'auth'], function() {
+Route::group(['prefix' => 'product','middleware' => ['auth','role:admin']], function() {
   Route::get('/', [ProductController::class, 'index'])->name('product.index');
-  Route::get('/create', [ProductController::class, 'create'])->name('product.create');
-  Route::post('/insert', [ProductController::class, 'store'])->name('product.insert');
+  Route::group(['middleware' => 'permission:create'],function(){
+    Route::get('/create', [ProductController::class, 'create'])->name('product.create');
+    Route::post('/insert', [ProductController::class, 'store'])->name('product.insert');
+  });
+  Route::group(['middleware' => 'permission:update'],function(){
   Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
   Route::post('/update/{id}', [ProductController::class, 'update'])->name('product.update');
+  });
+  Route::group(['middleware' => 'permission:delete'],function(){
   Route::get('/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
   Route::get('/export', [ProductController::class , 'export'])->name('product.export');
-  Route::get('/datatable', [ProductController::class, 'data'])->name('product.data');
+});
+Route::get('/datatable', [ProductController::class, 'data'])->name('product.data');
 });
 
-Route::group(['prefix' => 'customer' , 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'customer' , 'middleware' => ['auth','role:user']], function(){
   Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
+  Route::group(['middleware' => 'permission:create'],function(){
   Route::get('/create', [CustomerController::class , 'create'])->name('customer.create');
   Route::post('/insert' , [CustomerController::class, 'store'])->name('customer.store');
+  });
+  Route::group(['middleware' => 'permission:update'],function(){
   Route::get('/edit/{id}' , [CustomerController::class, 'edit'])->name('customer.edit');
   Route::post('/update/{id}' , [CustomerController::class, 'update'])->name('customer.update');
+  });
+  Route::group(['middleware' => 'permission:delete'],function(){
   Route::get('/delete/{id}' , [CustomerController::class, 'destroy'])->name('customer.delete');
   Route::get('/export', [CustomerController::class , 'export'])->name('customer.export');
-  Route::get('/datatable', [CustomerController::class, 'data'])->name('customer.data');
   Route::get('/import', [CustomerController::class , 'fimport'])->name('customer.import');
   Route::post('/importfile', [CustomerController::class , 'Import'])->name('customer.fimport');
+});
+Route::get('/datatable', [CustomerController::class, 'data'])->name('customer.data');
 });
 
 Route::group(['prefix' => 'order' , 'middleware' => 'auth'], function(){
@@ -132,18 +153,18 @@ Route::group(['prefix' => 'order' , 'middleware' => 'auth'], function(){
   Route::get('/datatable', [OrderController::class, 'data'])->name('order.data');
   Route::get('/dash',[OrderController::class, 'countorder']);
   Route::get('/importview', [OrderController::class , 'importView'])->name('order.view');
-  Route::post('/import', [OrderController::class , 'import'])->name('order.import');
+  Route::post('/import', [OrderController::class , 'import'])->name('order.import');  
   
 });
 Route::get('/form',[OrderController::class, 'form']);
 
-Route::group(['prefix' => 'profile2' , 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'profile2' , 'middleware' => ['auth','role:admin']], function(){
   Route::get('/update', [Profile2Controller::class, 'index'])->name('profile2.index');
   Route::post('/store', [Profile2Controller::class, 'store'])->name('profile2.store');
   Route::get('/delete', [Profile2Controller::class, 'create'])->name('profile2.create');
 });
 
-Route::group(['prefix' => 'permission' , 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'permission' , 'middleware' => ['auth','role:admin']], function(){
   Route::get('/index',[PermissionController::class, 'index'])->name('permission.index');
   Route::get('/create',[PermissionController::class, 'create'])->name('permission.create');
   Route::post('/store',[PermissionController::class, 'store'])->name('permission.store');
@@ -153,7 +174,7 @@ Route::group(['prefix' => 'permission' , 'middleware' => 'auth'], function(){
   Route::get('/delete/{id}',[PermissionController::class, 'destroy'])->name('permission.delete');
 });
 
-Route::group(['prefix' => 'roles' , 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'roles' , 'middleware' => ['auth','role:admin']], function(){
   Route::get('/index',[RoleController::class, 'index'])->name('role.index');
   Route::get('/create',[RoleController::class, 'create'])->name('role.create');
   Route::post('/store',[RoleController::class, 'store'])->name('role.store');
@@ -163,14 +184,15 @@ Route::group(['prefix' => 'roles' , 'middleware' => 'auth'], function(){
   Route::get('/delete/{id}',[RoleController::class, 'destroy'])->name('role.delete');
 });
 
-Route::group(['prefix' => 'spatie' , 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'spatie' , 'middleware' => ['auth','role:admin']], function(){
   Route::get('/index',[IndexController::class, 'index'])->name('assign.index');
-  Route::post('/assign',[IndexController::class, 'store'])->name('assign.store');
-  
- 
+  Route::post('/assign',[IndexController::class, 'store'])->name('assign.store'); 
 });
 
-  Route::group(['prefix' => 'userrole' , 'middleware' => 'auth'], function(){
+  Route::group(['prefix' => 'userrole' , 'middleware' => ['auth','role:admin']], function(){
     Route::get('/index',[UserroleController::class, 'index'])->name('urole.index');
     Route::post('/assignrole',[UserroleController::class, 'store'])->name('urole.store');
   });
+
+
+  Route::get('/userr', [ProfileController::class, 'checkuser']);

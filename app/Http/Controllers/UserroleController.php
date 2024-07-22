@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserroleController extends Controller
 {
@@ -11,7 +13,9 @@ class UserroleController extends Controller
      */
     public function index()
     {
-        //
+        $user = User::all();
+        $roles = Role::all();
+        return view('roles.userroles',compact('user','roles'));
     }
 
     /**
@@ -27,7 +31,12 @@ class UserroleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userid = $request->userr;
+        $user = User::find($userid);
+        $roles = $request->role;
+        $user->assignRole((int)$roles);
+       
+        return redirect()->route('urole.index');
     }
 
     /**

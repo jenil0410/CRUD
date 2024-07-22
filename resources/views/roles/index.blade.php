@@ -22,10 +22,7 @@
             /* Adjust as needed */
         }
     </style>
-    <div class="container">
-
-
-    </div>
+    
     <div class="container mx-auto px-4 lg:w-4/5 xl:w-3/4">
         <a href="{{ route('role.create') }}" class="btn btn-primary btn-sm object-right">Add</a>
         {{-- <a href="{{ route('customer.import') }}" class="btn btn-primary btn-sm object-right">Import</a>

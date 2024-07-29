@@ -46,13 +46,13 @@
                     </thead>
                     <tbody style="text-align: center">
                         {{-- {{ dd($alllogs) }} --}}
-                        @foreach ($logs as $item)
+                        @foreach ($alllogs as $log)
                             <tr>
                                 <td>{{ $log->id }}</td>
-                                <td>{{ $log->created_at }}</td>
-                                <td>{{ $log->subject_type }}</td>
-                                <td>{{ ($log->causer)->name }}</td>
+                                <td>{{ $log->created_at->format('d/m/Y') }}</td>
                                 <td>{{ $log->description }}</td>
+                                <td>{{ ($log->causer)->name }}</td>
+                                <td>{{ $log->properties}}</td>
                                 {{-- <td>{{ $log->event }}</td> --}}
                             </tr>
                         @endforeach

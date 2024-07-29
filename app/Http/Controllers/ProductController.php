@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ProductsExport;
 use App\Models\Products;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Storage;
@@ -13,13 +14,23 @@ use Yajra\DataTables\DataTables;
 
 class ProductController extends Controller
 {
+
+  // public function __construct()
+  //   {
+  //       $this->middleware('role:products');
+  //   }
   /**
    * Display a listing of the resource.
    */
   public function index()
   {
     $user = Products::all();
-    return view("products.index", compact('user'));
+    $readCheck = Permission::checkCRUDPermissionToUser("products", "read");
+    $updateCheck = Permission::checkCRUDPermissionToUser("products", "update");
+    $createCheck = Permission::checkCRUDPermissionToUser("products", "create");
+    $deleteCheck = Permission::checkCRUDPermissionToUser("products", "delete");
+    $isSuperAdmin = Permission::isSuperAdmin();
+    return view("products.index", compact('user','readCheck', 'updateCheck' ,'deleteCheck','isSuperAdmin'));
   }
 
   /**

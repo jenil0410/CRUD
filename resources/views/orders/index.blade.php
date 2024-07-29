@@ -3,7 +3,17 @@
 @section('title', 'Tables - Basic Tables')
 
 @section('content')
+@php
+    
+    use App\Models\Permission;
+    
 
+        $readCheck = Permission::checkCRUDPermissionToUser("orders", "read");
+        $updateCheck = Permission::checkCRUDPermissionToUser("orders", "update");
+        $createCheck = Permission::checkCRUDPermissionToUser("orders", "create");
+        $deleteCheck = Permission::checkCRUDPermissionToUser("orders", "delete");
+        $isSuperAdmin = Permission::isSuperAdmin();
+@endphp
     <!DOCTYPE html>
     <html lang="en">
 
@@ -12,7 +22,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Document</title>
-   
+
 
     </head>
     <style>
@@ -26,9 +36,15 @@
 
     </div>
     <div class="container mx-auto px-4 lg:w-4/5 xl:w-3/4">
-        <a href="{{ route('order.create') }}" class="btn btn-primary btn-sm object-right">Add</a>
-        <a href="{{ route('order.view') }}" class="btn btn-primary btn-sm object-right">Import</a>
-        <a href="{{ route('order.export') }}" class="btn btn-primary btn-sm object-right">Export</a>
+        @if ($isSuperAdmin || $createCheck)
+            <a href="{{ route('order.create') }}" class="btn btn-primary btn-sm object-right">Add</a>
+        @endif
+        @if ($isSuperAdmin || $updateCheck)
+            <a href="{{ route('order.view') }}" class="btn btn-primary btn-sm object-right">Import</a>
+        @endif
+        @if ($isSuperAdmin || $updateCheck)
+            <a href="{{ route('order.export') }}" class="btn btn-primary btn-sm object-right">Export</a>
+        @endif
         <div class="card mt-5">
             <div class="card-header">
                 <h5 class="card-title">Orders</h5>
@@ -68,6 +84,10 @@
 
     <script>
         $(document).ready(function() {
+            const readCheck = @json($readCheck);
+            const updateCheck = @json($updateCheck);
+            const deleteCheck = @json($deleteCheck);
+            const isSuperAdmin = @json($isSuperAdmin);
             $('.order').dataTable({
 
                 searching: false,
@@ -147,18 +167,30 @@
                                 full
                                 .id);
 
-                            return '<a href="' + editUrl +
-                                '" class="btn btn-primary btn-sm pr-2">Edit</a>     ' +
-                                '<a href="' + deleteUrl +
-                                '" class="btn btn-danger btn-sm">Delete</a>  ' +
-                                '<a href="' + invoiceUrl +
-                                '" class="btn btn-success btn-sm">Invoice</a> ';
+                            let buttons = '';
+
+                            if (isSuperAdmin || updateCheck) {
+                                buttons +=
+                                    `<a href="${editUrl}" class="btn btn-primary btn-sm pr-2">Edit</a>`;
+                            }
+
+                            if (isSuperAdmin || deleteCheck) {
+                                buttons +=
+                                    `<a href="${deleteUrl}" class="btn btn-danger btn-sm">Delete</a>`;
+                            }
+
+                            if (isSuperAdmin) {
+                                buttons +=
+                                    `<a href="${invoiceUrl}" class="btn btn-success btn-sm">Invoice</a>`;
+                            }
+
+                            return buttons;
                         }
                     }
                 ]
             });
         });
     </script>
-   
+
 
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\OrdersExport;
 use App\Imports\OrderImport;
+use App\Models\Permission;
 use App\Models\Customers;
 use App\Models\Orders;
 use App\Models\Products;
@@ -20,8 +21,14 @@ use Illuminate\Support\Facades\Validator;
 
 
 
+
 class OrderController extends Controller
 {
+
+    // public function __construct()
+    // {
+    //     $this->middleware('role:orders');
+    // }
     /**
      * Display a listing of the resource.
      */
@@ -30,7 +37,13 @@ class OrderController extends Controller
         $order = Orders::with('product','customer')->get();
         $products = Products::all();
         $customer = Customers::all();
-        return view('orders.index',compact('order','products','customer'));
+        $readCheck = Permission::checkCRUDPermissionToUser("orders", "read");
+        $updateCheck = Permission::checkCRUDPermissionToUser("orders", "update");
+        $createCheck = Permission::checkCRUDPermissionToUser("orders", "create");
+        $deleteCheck = Permission::checkCRUDPermissionToUser("orders", "delete");
+        $isSuperAdmin = Permission::isSuperAdmin();
+        // dd($deleteCheck);
+        return view('orders.index',compact('order','products','customer','readCheck', 'updateCheck' ,'deleteCheck','isSuperAdmin'));
     }
 
     /**

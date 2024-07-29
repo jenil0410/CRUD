@@ -68,6 +68,10 @@
 
     <script>
         $(document).ready(function() {
+            const readCheck = @json($readCheck);
+            const updateCheck = @json($updateCheck);
+            const deleteCheck = @json($deleteCheck);
+            const isSuperAdmin = @json($isSuperAdmin);
             $('#table').dataTable({
 
                 searching: false,
@@ -139,12 +143,20 @@
                                 var deleteUrl = '{{ route('customer.delete', ':id') }}'.replace(':id',
                                     full.id);
 
-                                return '<div class="d-flex justify-content-center space-x-4">' +
-                                    '<a href="' + editUrl +
-                                    '" class="btn btn-primary btn-sm">Edit</a> ' +
-                                    '<a href="' + deleteUrl +
-                                    '" class="btn btn-danger btn-sm ml-4">Delete</a>'; +
-                                '</div>';
+                                    let buttons = '';
+
+                                    if (isSuperAdmin || updateCheck) {
+                                    buttons +=
+                                    '<a href="' + editUrl + '" class="btn btn-primary btn-sm">Edit</a> ' ;
+                                    }
+
+                                    if (isSuperAdmin || deleteCheck) {
+                                    buttons += 
+                                    '<a href="' + deleteUrl + '" class="btn btn-danger btn-sm">Delete</a>';
+                                    }
+
+                            return buttons; 
+                                
                             }
                         }
                     ]

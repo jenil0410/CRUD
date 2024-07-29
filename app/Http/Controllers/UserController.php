@@ -2,24 +2,20 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\Customers;
-use App\Models\Orders;
-use App\Models\Products;
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
-use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
-class ActivitylogController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        
-        $alllogs = Activity ::all();
-        $alllogs = $alllogs->sortByDesc('Created_at');
-        return view('activitylog.activitylog',compact('alllogs'));
+        //
     }
 
     /**
@@ -27,7 +23,8 @@ class ActivitylogController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::all();
+        return view('user.create',compact('roles'));
     }
 
     /**
@@ -35,7 +32,16 @@ class ActivitylogController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $params = $request->all();
+        if (!empty($params['password'])) {
+            $params['password'] = Hash::make($request->password);
+        }
+        $params['Role_id'] = $request->Role_id ? $params['Role_id'] : 2;
+        
+        User::create($params);
+        // dd($params);
+        return redirect(RouteServiceProvider::HOME);
+
     }
 
     /**

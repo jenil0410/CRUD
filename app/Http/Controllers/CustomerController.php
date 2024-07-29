@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Facades\Excel;
 use Sabberworm\CSS\Property\Import;
 use Yajra\DataTables\DataTables;
+use App\Models\Permission;
 use Log;
 
 class CustomerController extends Controller
@@ -25,7 +26,12 @@ class CustomerController extends Controller
     public function index()
     {
         $customer = Customers::all(); 
-        return view("customers.index" ,compact('customer')); 
+        $readCheck = Permission::checkCRUDPermissionToUser("Customer", "read");
+        $updateCheck = Permission::checkCRUDPermissionToUser("Customer", "update");
+        $createCheck = Permission::checkCRUDPermissionToUser("Customer", "create");
+        $deleteCheck = Permission::checkCRUDPermissionToUser("Customer", "delete");
+        $isSuperAdmin = Permission::isSuperAdmin();
+        return view("customers.index" ,compact('customer','readCheck', 'updateCheck' ,'deleteCheck','isSuperAdmin')); 
     }
 
     /**

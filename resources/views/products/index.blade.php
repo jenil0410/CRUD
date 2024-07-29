@@ -3,7 +3,17 @@
 @section('title', 'Tables - Basic Tables')
 
 @section('content')
+@php
+    
+    use App\Models\Permission;
+    
 
+        $readCheck = Permission::checkCRUDPermissionToUser("orders", "read");
+        $updateCheck = Permission::checkCRUDPermissionToUser("orders", "update");
+        $createCheck = Permission::checkCRUDPermissionToUser("orders", "create");
+        $deleteCheck = Permission::checkCRUDPermissionToUser("orders", "delete");
+        $isSuperAdmin = Permission::isSuperAdmin();
+@endphp
     <!DOCTYPE html>
     <html lang="en">
 
@@ -27,7 +37,9 @@
 
     </div>
     <div class="container mx-auto px-4 lg:w-4/5 xl:w-3/4">
+        @if ($isSuperAdmin || $createCheck)
         <a href="{{ route('product.create') }}" class="btn btn-primary btn-sm object-right">Add</a>
+        @endif
         <div class="card mt-5">
             <div class="card-header">
                 <h5 class="card-title">Orders</h5>
@@ -62,6 +74,7 @@
 
     <script>
         $(document).ready(function() {
+            
             $('.order').dataTable({
 
                 searching: false,
@@ -104,10 +117,20 @@
                             var editUrl = '{{ route('product.edit', ':id') }}'.replace(':id', full.id);
                             var deleteUrl = '{{ route('product.delete', ':id') }}'.replace(':id', full.id);
                             
-                            return '<a href="' + editUrl + '" class="btn btn-primary btn-sm">Edit</a> ' +
+                            let buttons = '';
+                            if (isSuperAdmin || updateCheck) {
+                            buttons +=
+                             '<a href="' + editUrl + '" class="btn btn-primary btn-sm">Edit</a> ' ;
+                            }
+
+                            if (isSuperAdmin || deleteCheck) {
+                             buttons += 
                             '<a href="' + deleteUrl + '" class="btn btn-danger btn-sm">Delete</a>';
-                        }
+                            }
+
+                            return buttons;
                     }
+                }
                 ],
                 dom: 'Blrtip',
                 buttons: [

@@ -1,32 +1,26 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Product Create')
+@section('title', 'Tables - Basic Tables')
 
 @section('content')
-    <style>
-        .text-red {
-            color: red;
-        }
-    </style>
 
 <div class="row">
     <div class="col-xl">
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 page-header-title">Role Update</h5>
+                <h5 class="mb-0">Role View</h5>
             </div>
             <div class="card-body">
                 <form method="POST" enctype="multipart/form-data" action="{{ route('role.update', $role->id) }}">
                     @csrf
-                    {{-- @method('PUT') --}}
                     <div class="row">
                         <input type="hidden" name="id" value="{{ $role->id }}">
 
                         <div class="form-floating form-floating-outline mb-4">
-                            <input type="text" class="form-control" name="name" id="name"
-                                value="{{ old('name', $role->name) }}" placeholder="Enter Role" required />
-                            <label for="name">Role</label>
-                            @error('name')
+                            <input type="text" class="form-control" name="role" id="role"
+                                value="{{ $role->name }}" required readonly/>
+                            <label for="role">Role</label>
+                            @error('role')
                                 <small class="red-text ml-10" role="alert">
                                     {{ $message }}
                                 </small>
@@ -51,7 +45,7 @@
                                                 @php
                                                     $data = $permission
                                                         ->where('module', $value)
-                                                        ->where('role_id', $role->id)
+                                                        ->where('Role_id', $role->id)
                                                         ->first();
                                                     if (!empty($data)) {
                                                         $create = $data['create'] == 'on' ? 'checked' : '';
@@ -67,7 +61,7 @@
                                                             <label class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     name="permission[{{ $key }}][create]"
-                                                                    {{ $create }} />
+                                                                    {{ $create }} disabled />
                                                                 <span></span>
                                                             </label>
                                                         </td>
@@ -75,7 +69,7 @@
                                                             <label class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     name="permission[{{ $key }}][read]"
-                                                                    {{ $read }} />
+                                                                    {{ $read }} disabled />
                                                                 <span></span>
                                                             </label>
                                                         </td>
@@ -83,7 +77,7 @@
                                                             <label class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     name="permission[{{ $key }}][update]"
-                                                                    {{ $update }} />
+                                                                    {{ $update }} disabled />
                                                                 <span></span>
                                                             </label>
                                                         </td>
@@ -91,7 +85,7 @@
                                                             <label class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     name="permission[{{ $key }}][delete]"
-                                                                    {{ $delete }} />
+                                                                    {{ $delete }} disabled />
                                                                 <span></span>
                                                             </label>
                                                         </td>
@@ -102,28 +96,28 @@
                                                         <td>
                                                             <label class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    name="permission[{{ $key }}][create]" />
+                                                                    name="permission[{{ $key }}][create]" disabled />
                                                                 <span></span>
                                                             </label>
                                                         </td>
                                                         <td>
                                                             <label class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    name="permission[{{ $key }}][read]" />
+                                                                    name="permission[{{ $key }}][read]" disabled />
                                                                 <span></span>
                                                             </label>
                                                         </td>
                                                         <td>
                                                             <label class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    name="permission[{{ $key }}][update]" />
+                                                                    name="permission[{{ $key }}][update]" disabled />
                                                                 <span></span>
                                                             </label>
                                                         </td>
                                                         <td>
                                                             <label class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    name="permission[{{ $key }}][delete]" />
+                                                                    name="permission[{{ $key }}][delete]" disabled />
                                                                 <span></span>
                                                             </label>
                                                         </td>
@@ -136,13 +130,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-6">
-                            <a href="{{ route('role.index') }}" class="btn btn-primary">Back</a>
-                        </div>
-                        <div class="col-6 mb-4 text-end">
-                            <button type="submit" class="btn btn-primary">Save changes<i
-                                    class="material-icons right"></i></button>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 mt-4">
+                            <a href="{{ route('roles.index') }}" class="btn btn-primary">Back</a>
                         </div>
                     </div>
                 </form>
